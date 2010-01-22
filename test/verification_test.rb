@@ -1,4 +1,4 @@
-require 'abstract_unit'
+require 'test_helper'
 
 class VerificationTest < ActionController::TestCase
   class TestController < ActionController::Base
