@@ -1,115 +1,115 @@
 require 'test_helper'
 
-class VerificationTest < ActionController::TestCase
-  class TestController < ActionController::Base
-    verify :only => :guarded_one, :params => "one",
-           :add_flash => { :error => 'unguarded' },
-           :redirect_to => { :action => "unguarded" }
+class VerificationTestController < ActionController::Base
+  verify :only => :guarded_one, :params => "one",
+         :add_flash => { :error => 'unguarded' },
+         :redirect_to => { :action => "unguarded" }
 
-    verify :only => :guarded_two, :params => %w( one two ),
-           :redirect_to => { :action => "unguarded" }
+  verify :only => :guarded_two, :params => %w( one two ),
+         :redirect_to => { :action => "unguarded" }
 
-    verify :only => :guarded_with_flash, :params => "one",
-           :add_flash => { :notice => "prereqs failed" },
-           :redirect_to => { :action => "unguarded" }
+  verify :only => :guarded_with_flash, :params => "one",
+         :add_flash => { :notice => "prereqs failed" },
+         :redirect_to => { :action => "unguarded" }
 
-    verify :only => :guarded_in_session, :session => "one",
-           :redirect_to => { :action => "unguarded" }
+  verify :only => :guarded_in_session, :session => "one",
+         :redirect_to => { :action => "unguarded" }
 
-    verify :only => [:multi_one, :multi_two], :session => %w( one two ),
-           :redirect_to => { :action => "unguarded" }
+  verify :only => [:multi_one, :multi_two], :session => %w( one two ),
+         :redirect_to => { :action => "unguarded" }
 
-    verify :only => :guarded_by_method, :method => :post,
-           :redirect_to => { :action => "unguarded" }
+  verify :only => :guarded_by_method, :method => :post,
+         :redirect_to => { :action => "unguarded" }
 
-    verify :only => :guarded_by_xhr, :xhr => true,
-           :redirect_to => { :action => "unguarded" }
+  verify :only => :guarded_by_xhr, :xhr => true,
+         :redirect_to => { :action => "unguarded" }
 
-    verify :only => :guarded_by_not_xhr, :xhr => false,
-           :redirect_to => { :action => "unguarded" }
+  verify :only => :guarded_by_not_xhr, :xhr => false,
+         :redirect_to => { :action => "unguarded" }
 
-    before_filter :unconditional_redirect, :only => :two_redirects
-    verify :only => :two_redirects, :method => :post,
-           :redirect_to => { :action => "unguarded" }
+  before_filter :unconditional_redirect, :only => :two_redirects
+  verify :only => :two_redirects, :method => :post,
+         :redirect_to => { :action => "unguarded" }
 
-    verify :only => :must_be_post, :method => :post, :render => { :status => 405, :text => "Must be post" }, :add_headers => { "Allow" => "POST" }
+  verify :only => :must_be_post, :method => :post, :render => { :status => 405, :text => "Must be post" }, :add_headers => { "Allow" => "POST" }
 
-    verify :only => :guarded_one_for_named_route_test, :params => "one",
-           :redirect_to => :foo_url
+  verify :only => :guarded_one_for_named_route_test, :params => "one",
+         :redirect_to => :foo_url
 
-    verify :only => :no_default_action, :params => "santa"
+  verify :only => :no_default_action, :params => "santa"
 
-    verify :only => :guarded_with_back, :method => :post,
-           :redirect_to => :back
+  verify :only => :guarded_with_back, :method => :post,
+         :redirect_to => :back
 
-    def guarded_one
-      render :text => "#{params[:one]}"
-    end
-
-    def guarded_one_for_named_route_test
-      render :text => "#{params[:one]}"
-    end
-
-    def guarded_with_flash
-      render :text => "#{params[:one]}"
-    end
-
-    def guarded_two
-      render :text => "#{params[:one]}:#{params[:two]}"
-    end
-
-    def guarded_in_session
-      render :text => "#{session["one"]}"
-    end
-
-    def multi_one
-      render :text => "#{session["one"]}:#{session["two"]}"
-    end
-
-    def multi_two
-      render :text => "#{session["two"]}:#{session["one"]}"
-    end
-
-    def guarded_by_method
-      render :text => "#{request.method}"
-    end
-
-    def guarded_by_xhr
-      render :text => "#{request.xhr?}"
-    end
-
-    def guarded_by_not_xhr
-      render :text => "#{request.xhr?}"
-    end
-
-    def unguarded
-      render :text => "#{params[:one]}"
-    end
-
-    def two_redirects
-      render :nothing => true
-    end
-
-    def must_be_post
-      render :text => "Was a post!"
-    end
-
-    def guarded_with_back
-      render :text => "#{params[:one]}"
-    end
-
-    def no_default_action
-      # Will never run
-    end
-
-    protected
-
-    def unconditional_redirect
-      redirect_to :action => "unguarded"
-    end
+  def guarded_one
+    render :text => "#{params[:one]}"
   end
 
-  tests TestController
+  def guarded_one_for_named_route_test
+    render :text => "#{params[:one]}"
+  end
+
+  def guarded_with_flash
+    render :text => "#{params[:one]}"
+  end
+
+  def guarded_two
+    render :text => "#{params[:one]}:#{params[:two]}"
+  end
+
+  def guarded_in_session
+    render :text => "#{session["one"]}"
+  end
+
+  def multi_one
+    render :text => "#{session["one"]}:#{session["two"]}"
+  end
+
+  def multi_two
+    render :text => "#{session["two"]}:#{session["one"]}"
+  end
+
+  def guarded_by_method
+    render :text => "#{request.method}"
+  end
+
+  def guarded_by_xhr
+    render :text => "#{request.xhr?}"
+  end
+
+  def guarded_by_not_xhr
+    render :text => "#{request.xhr?}"
+  end
+
+  def unguarded
+    render :text => "#{params[:one]}"
+  end
+
+  def two_redirects
+    render :nothing => true
+  end
+
+  def must_be_post
+    render :text => "Was a post!"
+  end
+
+  def guarded_with_back
+    render :text => "#{params[:one]}"
+  end
+
+  def no_default_action
+    # Will never run
+  end
+
+  protected
+
+  def unconditional_redirect
+    redirect_to :action => "unguarded"
+  end
+end
+
+class VerificationTest < ActionController::TestCase
+  tests ::VerificationTestController
 
   def test_using_symbol_back_with_no_referrer
     assert_raise(ActionController::RedirectBackError) { get :guarded_with_back }
@@ -126,7 +126,7 @@ class VerificationTest < ActionController::TestCase
       with_routing do |set|
         set.draw do |map|
           match 'foo', :to => 'test#foo', :as => :foo
-          match 'verification_test/:action', :to => ::VerificationTest::TestController
+          match 'verification_test/:action', :to => ::VerificationTestController
         end
         get :guarded_one_for_named_route_test, :two => "not one"
         assert_redirected_to '/foo'
@@ -219,7 +219,7 @@ class VerificationTest < ActionController::TestCase
 
   def test_guarded_by_method_with_prereqs
     post :guarded_by_method
-    assert_equal "post", @response.body
+    assert_equal "POST", @response.body
   end
 
   def test_guarded_by_method_without_prereqs
