@@ -2,6 +2,8 @@ require 'rubygems'
 require 'test/unit'
 require 'active_support'
 require 'action_controller'
+require 'mocha'
+
 require File.dirname(__FILE__) + '/../lib/action_controller/verification'
 
 SharedTestRoutes = ActionDispatch::Routing::RouteSet.new
